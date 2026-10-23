@@ -24,7 +24,8 @@
     <section class="card" id="services">Загрузка...</section>
   </main>
   <script>
-    const gatewayUrl = 'http://localhost:8080';
+    // The frontend is served by the Gateway, so API calls use the same origin.
+    const gatewayUrl = '';
     const services = [
       ['Gateway', '/health'],
       ['Issues API', '/api/v1/issues'],
