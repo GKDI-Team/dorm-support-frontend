@@ -1,50 +1,13 @@
 <!doctype html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DormSupport</title>
-  <style>
-    :root { font-family: Inter, Arial, sans-serif; color: #172033; background: #f5f7fb; }
-    body { margin: 0; }
-    main { max-width: 760px; margin: 64px auto; padding: 0 24px; }
-    h1 { margin-bottom: 8px; }
-    p { color: #667085; }
-    .card { margin-top: 28px; padding: 24px; background: white; border-radius: 16px; box-shadow: 0 8px 24px #17203312; }
-    .row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #eaecf0; }
-    .row:last-child { border-bottom: 0; }
-    .status { color: #067647; font-weight: 700; }
-    .error { color: #b42318; }
-  </style>
-</head>
-<body>
-  <main>
-    <h1>DormSupport</h1>
-    <p>Первый этап: проверка доступности сервисов общежития.</p>
-    <section class="card" id="services">Загрузка...</section>
-  </main>
-  <script>
-    // The frontend is served by the Gateway, so API calls use the same origin.
-    const gatewayUrl = '';
-    const services = [
-      ['Gateway', '/health'],
-      ['Issues API', '/api/v1/issues'],
-      ['Auth service', '/api/v1/auth/health'],
-      ['Notifications service', '/api/v1/notifications/health']
-    ];
-
-    Promise.all(services.map(async ([name, path]) => {
-      try {
-        const response = await fetch(`${gatewayUrl}${path}`);
-        return { name, ok: response.ok };
-      } catch (error) {
-        return { name, ok: false };
-      }
-    })).then(results => {
-      document.querySelector('#services').innerHTML = results.map(result =>
-        `<div class="row"><span>${result.name}</span><span class="${result.ok ? 'status' : 'error'}">${result.ok ? 'Доступен' : 'Недоступен'}</span></div>`
-      ).join('');
-    });
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#172033" />
+    <title>DormSupport</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
