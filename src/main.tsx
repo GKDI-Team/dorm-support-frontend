@@ -1,7 +1,7 @@
 import { StrictMode, useEffect, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { apiRequest, clearSessionId, getSessionId, saveSessionId } from './api';
+import { apiRequest, clearAccessToken, getAccessToken, saveAccessToken } from './api';
 import type { LoginResponse, User, UserRole } from './api';
 import './styles.css';
 
@@ -26,7 +26,7 @@ function LoginPage({ onLogin }: LoginPageProps) {
     event.preventDefault(); setLoading(true); setError('');
     try {
       const result = await apiRequest<LoginResponse>('/api/v1/auth/login', { method: 'POST', body: JSON.stringify({ login, password }) });
-      saveSessionId(result.sessionId); onLogin(result.user);
+      saveAccessToken(result.accessToken); onLogin(result.user);
     } catch (requestError) { setError(requestError instanceof Error ? requestError.message : 'Не удалось войти'); } finally { setLoading(false); }
   }
 
@@ -70,16 +70,16 @@ function Dashboard({ user, onLogout }: DashboardProps) {
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
-  const [checkingSession, setCheckingSession] = useState(Boolean(getSessionId()));
+  const [checkingSession, setCheckingSession] = useState(Boolean(getAccessToken()));
 
   useEffect(() => {
-    if (!getSessionId()) return;
-    apiRequest<User>('/api/v1/auth/me').then(setUser).catch(() => clearSessionId()).finally(() => setCheckingSession(false));
+    if (!getAccessToken()) return;
+    apiRequest<User>('/api/v1/auth/me').then(setUser).catch(() => clearAccessToken()).finally(() => setCheckingSession(false));
   }, []);
 
   async function logout(): Promise<void> {
     try { await apiRequest<void>('/api/v1/auth/logout', { method: 'POST' }); } catch (_) { /* clear local state anyway */ }
-    clearSessionId(); setUser(null);
+    clearAccessToken(); setUser(null);
   }
 
   if (checkingSession) return <main className="page loading">Проверяем сессию...</main>;

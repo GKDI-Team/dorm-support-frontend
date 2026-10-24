@@ -1,4 +1,4 @@
-const SESSION_KEY = 'dormsupport.sessionId';
+const TOKEN_KEY = 'dormsupport.accessToken';
 
 export type UserRole = 'RESIDENT' | 'REVIEWER' | 'ADMIN';
 
@@ -13,7 +13,7 @@ export interface User {
 }
 
 export interface LoginResponse {
-  sessionId: string;
+  accessToken: string;
   user: User;
 }
 
@@ -21,15 +21,15 @@ interface ApiError {
   message?: string;
 }
 
-export function getSessionId(): string | null { return sessionStorage.getItem(SESSION_KEY); }
-export function saveSessionId(sessionId: string): void { sessionStorage.setItem(SESSION_KEY, sessionId); }
-export function clearSessionId(): void { sessionStorage.removeItem(SESSION_KEY); }
+export function getAccessToken(): string | null { return sessionStorage.getItem(TOKEN_KEY); }
+export function saveAccessToken(token: string): void { sessionStorage.setItem(TOKEN_KEY, token); }
+export function clearAccessToken(): void { sessionStorage.removeItem(TOKEN_KEY); }
 
 export async function apiRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
   const headers = new Headers(options.headers);
   if (options.body) headers.set('Content-Type', 'application/json');
-  const sessionId = getSessionId();
-  if (sessionId) headers.set('X-Session-Id', sessionId);
+  const accessToken = getAccessToken();
+  if (accessToken) headers.set('Authorization', `Bearer ${accessToken}`);
 
   const response = await fetch(path, { ...options, headers });
   const contentType = response.headers.get('content-type') || '';
@@ -38,7 +38,7 @@ export async function apiRequest<T>(path: string, options: RequestInit = {}): Pr
     : null;
 
   if (!response.ok) {
-    if (response.status === 401) clearSessionId();
+    if (response.status === 401) clearAccessToken();
     throw new Error(body?.message || `Request failed with status ${response.status}`);
   }
   return body as T;
