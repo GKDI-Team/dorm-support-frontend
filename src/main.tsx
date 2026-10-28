@@ -214,7 +214,7 @@ function Overview({user, setView}: { user: User; setView: (v: View) => void }) {
                     <div><h3>{user.fullName}</h3><p>{user.login}</p></div>
                 </div>
                 <div className="profile-details"><Info label="Корпус"
-                                                       value={user.block || 'Не указан'}/><Info
+                                                       value={user.blockId || 'Не указан'}/><Info
                     label="Комната" value={user.roomNumber || 'Не указана'}/><Info label="В системе с"
                                                                                    value={formatDate(user.createdAt)}/>
                 </div>
@@ -285,7 +285,7 @@ function IssuesPage({user, onOpen, onCreate}: { user: User; onOpen: (id: string)
                             <div><strong>{issue.title}</strong><small>{issue.categoryName}</small></div>
                         </div>
                         <div className="issue-place">
-                            <strong>Блок {issue.block}</strong><small>Комната {issue.roomNumber}</small>
+                            <strong>Блок {issue.blockId}</strong><small>Комната {issue.roomNumber}</small>
                         </div>
                         <StatusBadge status={issue.status}/>
                         <time>{formatDate(issue.createdAt)}</time>
@@ -414,7 +414,7 @@ function IssueDetailsPage({issueId, user, onBack}: { issueId: string; user: User
                             className="description-text">{issue.description}</p></div>
                         <div className="detail-section"><span className="section-label">Место</span>
                             <div className="location-box"><span>⌖</span>
-                                <div><strong>Блок {issue.block}</strong><p>{issue.locationDetails} ·
+                                <div><strong>Блок {issue.blockId}</strong><p>{issue.locationDetails} ·
                                     комната {issue.roomNumber}</p></div>
                             </div>
                         </div>
@@ -448,7 +448,8 @@ function UsersPage() {
 
     async function createUser(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        const form = new FormData(event.currentTarget);
+        const formElement = event.currentTarget;
+        const form = new FormData(formElement);
         setCreating(true);
         setNotice(undefined);
         try {
@@ -463,7 +464,7 @@ function UsersPage() {
                     roomNumber: String(form.get('roomNumber'))
                 })
             });
-            event.currentTarget.reset();
+            formElement.reset();
             setNotice({type: 'success', text: 'Аккаунт создан. Передайте пользователю логин и первоначальный пароль.'});
         } catch (e) {
             setNotice({type: 'error', text: e instanceof Error ? e.message : 'Не удалось создать аккаунт'});
@@ -489,7 +490,7 @@ function UsersPage() {
                                                                                   minLength={8} maxLength={128}
                                                                                   required/></Field>
             <div className="two-fields"><Field label="Блок"><select name="block" defaultValue={blockOptions[0].value}
-                                                                       required>{blockOptions.map(block =>
+                                                                    required>{blockOptions.map(block =>
                 <option value={block.value} key={block.value}>{block.label}</option>)}</select></Field><Field
                 label="Комната"><input name="roomNumber" placeholder="203" maxLength={20} required/></Field></div>
             <NoticeBox notice={notice}/>
