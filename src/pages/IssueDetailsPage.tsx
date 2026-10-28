@@ -89,7 +89,7 @@ export default function IssueDetailsPage() {
                                 <div className="location-box">
                                     <span>⌖</span>
                                     <div>
-                                        <strong>Блок {shortId(issue.blockId)}</strong>
+                                        <strong>Блок {issue.block || 'Не указан'}</strong>
                                         <p>{issue.locationDetails} · комната {issue.roomNumber}</p>
                                     </div>
                                 </div>

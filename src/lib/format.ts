@@ -8,8 +8,8 @@ export function formatDate(value: string): string {
 }
 
 /** Короткий идентификатор для UI: первые 8 символов в верхнем регистре. */
-export function shortId(value: string): string {
-    return value.slice(0, 8).toUpperCase();
+export function shortId(value: string | null | undefined): string {
+    return value ? value.slice(0, 8).toUpperCase() : '—';
 }
 
 /** 1 заявка / 2 заявки / 5 заявок */

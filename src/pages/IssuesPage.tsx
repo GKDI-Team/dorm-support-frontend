@@ -10,7 +10,7 @@ import Loading from '../components/Loading';
 import EmptyState from '../components/EmptyState';
 import StatusBadge from '../components/StatusBadge';
 import {statusLabels} from '../lib/labels';
-import {formatDate, pluralize, shortId} from '../lib/format';
+import {formatDate, pluralize} from '../lib/format';
 
 type Filter = 'ALL' | IssueStatus;
 
@@ -113,7 +113,7 @@ export default function IssuesPage() {
                                     </div>
                                 </div>
                                 <div className="issue-place">
-                                    <strong>Блок {shortId(issue.blockId)}</strong>
+                                    <strong>Блок {issue.block || 'Не указан'}</strong>
                                     <small>Комната {issue.roomNumber}</small>
                                 </div>
                                 <StatusBadge status={issue.status}/>

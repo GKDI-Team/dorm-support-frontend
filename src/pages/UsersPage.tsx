@@ -25,7 +25,7 @@ export default function UsersPage() {
                     password: String(form.get('password')),
                     fullName: String(form.get('fullName')),
                     role: String(form.get('role')) as UserRole,
-                    blockId: String(form.get('blockId')),
+                    block: String(form.get('block')),
                     roomNumber: String(form.get('roomNumber'))
                 })
             });
@@ -77,8 +77,8 @@ export default function UsersPage() {
                     <input name="password" type="password" minLength={8} maxLength={128} required/>
                 </Field>
                 <div className="two-fields">
-                    <Field label="Block ID" hint="UUID корпуса">
-                        <input name="blockId" placeholder="UUID блока" required/>
+                    <Field label="Блок">
+                        <input name="block" placeholder="Например, 11111111" maxLength={50} required/>
                     </Field>
                     <Field label="Комната">
                         <input name="roomNumber" placeholder="203" maxLength={20} required/>

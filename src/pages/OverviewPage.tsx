@@ -7,7 +7,7 @@ import PageHeading from '../components/PageHeading';
 import StatCard from '../components/StatCard';
 import Info from '../components/Info';
 import Step from '../components/Step';
-import {formatDate, shortId} from '../lib/format';
+import {formatDate} from '../lib/format';
 
 export default function OverviewPage() {
     const {user} = useAuth();
@@ -86,7 +86,7 @@ export default function OverviewPage() {
                         </div>
                     </div>
                     <div className="profile-details">
-                        <Info label="Корпус" value={user.blockId ? shortId(user.blockId) : 'Не указан'}/>
+                        <Info label="Блок" value={user.block || 'Не указан'}/>
                         <Info label="Комната" value={user.roomNumber || 'Не указана'}/>
                         <Info label="В системе с" value={formatDate(user.createdAt)}/>
                     </div>
