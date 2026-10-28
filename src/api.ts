@@ -8,7 +8,7 @@ export interface User {
     login: string;
     fullName: string;
     role: UserRole;
-    blockId: string | null;
+    block: string | null;
     roomNumber: string | null;
     createdAt: string;
 }
@@ -27,7 +27,7 @@ export interface IssueCategory {
 export interface Issue {
     id: string;
     residentId: string;
-    blockId: string;
+    block: string;
     roomNumber: string;
     title: string;
     description: string;

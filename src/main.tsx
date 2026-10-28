@@ -13,6 +13,9 @@ const statusDescriptions: Record<IssueStatus, string> = {
     IN_PROGRESS: 'Ответственный уже занимается проблемой',
     CLOSED: 'Проблема решена'
 };
+const blockOptions = [
+    {value: '11111111', label: 'Блок 11111111'}
+];
 
 function Field({label, hint, children}: { label: string; hint?: string; children: ReactNode }) {
     return <label className="field"><span>{label}</span>{children}{hint && <small>{hint}</small>}</label>;
@@ -211,7 +214,7 @@ function Overview({user, setView}: { user: User; setView: (v: View) => void }) {
                     <div><h3>{user.fullName}</h3><p>{user.login}</p></div>
                 </div>
                 <div className="profile-details"><Info label="Корпус"
-                                                       value={user.blockId ? shortId(user.blockId) : 'Не указан'}/><Info
+                                                       value={user.block || 'Не указан'}/><Info
                     label="Комната" value={user.roomNumber || 'Не указана'}/><Info label="В системе с"
                                                                                    value={formatDate(user.createdAt)}/>
                 </div>
@@ -282,7 +285,7 @@ function IssuesPage({user, onOpen, onCreate}: { user: User; onOpen: (id: string)
                             <div><strong>{issue.title}</strong><small>{issue.categoryName}</small></div>
                         </div>
                         <div className="issue-place">
-                            <strong>Блок {shortId(issue.blockId)}</strong><small>Комната {issue.roomNumber}</small>
+                            <strong>Блок {issue.block}</strong><small>Комната {issue.roomNumber}</small>
                         </div>
                         <StatusBadge status={issue.status}/>
                         <time>{formatDate(issue.createdAt)}</time>
@@ -411,7 +414,7 @@ function IssueDetailsPage({issueId, user, onBack}: { issueId: string; user: User
                             className="description-text">{issue.description}</p></div>
                         <div className="detail-section"><span className="section-label">Место</span>
                             <div className="location-box"><span>⌖</span>
-                                <div><strong>Блок {shortId(issue.blockId)}</strong><p>{issue.locationDetails} ·
+                                <div><strong>Блок {issue.block}</strong><p>{issue.locationDetails} ·
                                     комната {issue.roomNumber}</p></div>
                             </div>
                         </div>
@@ -456,7 +459,7 @@ function UsersPage() {
                     password: String(form.get('password')),
                     fullName: String(form.get('fullName')),
                     role: String(form.get('role')) as UserRole,
-                    blockId: String(form.get('blockId')),
+                    block: String(form.get('block')),
                     roomNumber: String(form.get('roomNumber'))
                 })
             });
@@ -485,9 +488,9 @@ function UsersPage() {
             <Field label="Первоначальный пароль" hint="Минимум 8 символов"><input name="password" type="password"
                                                                                   minLength={8} maxLength={128}
                                                                                   required/></Field>
-            <div className="two-fields"><Field label="Block ID" hint="UUID корпуса"><input name="blockId"
-                                                                                           placeholder="UUID блока"
-                                                                                           required/></Field><Field
+            <div className="two-fields"><Field label="Блок"><select name="block" defaultValue={blockOptions[0].value}
+                                                                       required>{blockOptions.map(block =>
+                <option value={block.value} key={block.value}>{block.label}</option>)}</select></Field><Field
                 label="Комната"><input name="roomNumber" placeholder="203" maxLength={20} required/></Field></div>
             <NoticeBox notice={notice}/>
             <button className="primary-button full-width"
