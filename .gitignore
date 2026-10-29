@@ -1,4 +1,10 @@
-.idea/
+node_modules
+dist
+dist-ssr
+*.local
+.vite
+.env
+.env.local
+.env.*.local
+*.log
 .DS_Store
-dist/
-node_modules/
